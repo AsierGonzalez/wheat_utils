@@ -1,0 +1,5 @@
+library("tidyr")
+library("dplyr", lib.loc="D:/R/R-3.4.2/library")
+iwgsc_funct_annot <- read.table("iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0.TAB", sep="\t", header=T, comment="", as.is=T, quote = "\"")
+b2g_annot <- iwgsc_funct_annot %>% separate(Gene.ID, c("Gene.ID", "Transcript.Num"), sep="\\.") %>% select(c(Gene.ID, GO.IDs.via.Interpro)) %>% mutate(GO.IDs.via.Interpro=strsplit(as.character(GO.IDs.via.Interpro), ";")) %>% unnest(GO.IDs.via.Interpro) %>% distinct()
+write.table(b2g_annot, "iwgsc_refseqv1.0_FunctionalAnnotation_v1__HCgenes_v1.0.annot", quote=F, sep="\t", row.names = F)
